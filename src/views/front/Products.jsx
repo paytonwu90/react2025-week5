@@ -21,8 +21,8 @@ function Products() {
   }, []);
   
   return (
-    <div className="container py-5">
-      <ul className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-5 ps-0 mb-6 mb-lg-12">
+    <div className="container py-10">
+      <ul className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-8 ps-0 mb-6 mb-lg-12">
         {products.map((product) => (
           <li className="col list-unstyled" key={product.id ?? product.name}>
             <ProductCard product={product} />
