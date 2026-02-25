@@ -14,7 +14,6 @@ function SingleProduct() {
       try {
         const response = await axios.get(`${API_BASE}/api/${API_PATH}/product/${id}`);
         setProduct(response.data.product);
-        console.log(response.data.product);
       } catch (error) {
         console.error('fetchProduct error:', error);
       }
@@ -29,7 +28,6 @@ function SingleProduct() {
     };
     try {
       const response = await axios.post(`${API_BASE}/api/${API_PATH}/cart`, { data });
-      console.log(response.data);
     } catch (error) {
       console.log(error.response.data);
     }
