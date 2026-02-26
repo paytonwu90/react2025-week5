@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import { ShoppingCart } from "lucide-react";
 
 function ProductCard({ product }) {
   return (
@@ -10,12 +9,7 @@ function ProductCard({ product }) {
       <div className="card-body">
         <h5 className="card-title">{product.title}</h5>
         <p className="card-text">{product.description}</p>
-        <div className="d-flex justify-content-between align-items-center">
-          <Link to={`/product/${product.id}`} className="btn btn-primary">查看更多</Link>
-          <button className="btn">
-            <ShoppingCart />
-          </button>
-        </div>
+        <Link to={`/product/${product.id}`} className="btn btn-primary">查看更多</Link>
       </div>
     </div>
   )
