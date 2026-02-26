@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { formatCurrency } from "@utils/format";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -37,11 +38,29 @@ function Cart() {
     }
   }
   
+  async function handleDelete(cartId) {
+    try {
+      await axios.delete(`${API_BASE}/api/${API_PATH}/cart/${cartId}`);
+      await fetchCart();
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  }
+
+  async function handleDeleteAll() {
+    try {
+      await axios.delete(`${API_BASE}/api/${API_PATH}/carts`);
+      await fetchCart();
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  }
+  
   return (
     <div className="container py-10">
       <h2>購物車列表</h2>
       <div className="text-end mt-4">
-        <button type="button" className="btn btn-outline-danger">
+        <button type="button" className="btn btn-outline-danger" onClick={handleDeleteAll}>
           清空購物車
         </button>
       </div>
@@ -63,7 +82,7 @@ function Cart() {
             return (
               <tr key={item.id}>
                 <td>
-                  <button type="button" className="btn btn-outline-danger btn-sm">
+                  <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(item.id)}>
                     刪除
                   </button>
                 </td>
@@ -83,7 +102,7 @@ function Cart() {
                     <span className="input-group-text" id={`product-unit-${product.id}`}>{unit}</span>
                   </div>
                 </td>
-                <td className="text-end">{final_total}</td>
+                <td className="text-end">{formatCurrency(final_total)}</td>
               </tr>
             );
           })}
@@ -93,7 +112,7 @@ function Cart() {
             <td className="text-end" colSpan="3">
               總計
             </td>
-            <td className="text-end">{finalTotal}</td>
+            <td className="text-end">{formatCurrency(finalTotal)}</td>
           </tr>
         </tfoot>
       </table>
