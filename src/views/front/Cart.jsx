@@ -9,18 +9,33 @@ function Cart() {
   const [finalTotal, setFinalTotal] = useState(0);
   
   useEffect(() => {
-    async function fetchCart() {
-      try {
-        const response = await axios.get(`${API_BASE}/api/${API_PATH}/cart`);
-        const cartData = response.data.data;
-        setCart(cartData.carts);
-        setFinalTotal(cartData.final_total);
-      } catch (error) {
-        console.log(error.response.data);
-      }
-    }
     fetchCart();
   }, []);
+
+  async function fetchCart() {
+    try {
+      const response = await axios.get(`${API_BASE}/api/${API_PATH}/cart`);
+      const cartData = response.data.data;
+      setCart(cartData.carts);
+      setFinalTotal(cartData.final_total);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  }
+
+  async function handleUpdateQty(cartId, productId, qty = 1) {
+    const data = {
+      product_id: productId,
+      qty,
+    };
+    
+    try {
+      await axios.put(`${API_BASE}/api/${API_PATH}/cart/${cartId}`, { data });
+      await fetchCart();
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  }
   
   return (
     <div className="container py-10">
@@ -62,7 +77,7 @@ function Cart() {
                       aria-describedby={`product-unit-${product.id}`}
                       value={qty}
                       onChange={(e) => {
-                        console.log(e.target.value);
+                        handleUpdateQty(item.id, product.id, Number(e.target.value));
                       }}
                     />
                     <span className="input-group-text" id={`product-unit-${product.id}`}>{unit}</span>
