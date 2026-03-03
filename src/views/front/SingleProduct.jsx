@@ -28,6 +28,11 @@ function SingleProduct() {
     };
     try {
       const response = await axios.post(`${API_BASE}/api/${API_PATH}/cart`, { data });
+      if (response.data.success) {
+        alert('已加入購物車');
+      } else {
+        alert('加入購物車失敗');
+      }
     } catch (error) {
       console.log(error.response.data);
     }
