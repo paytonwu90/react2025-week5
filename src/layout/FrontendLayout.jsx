@@ -18,7 +18,7 @@ function FrontendLayout() {
                 <NavLink className="nav-link" to="/checkout">結帳</NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="/login">登入</NavLink>
+                <NavLink className="nav-link" to="/login">後台登入</NavLink>
               </li>
             </ul>
           </div>

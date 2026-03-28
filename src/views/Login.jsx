@@ -2,15 +2,18 @@ import { useState } from 'react'
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router';
 import axios from 'axios'
+import { useAuthContext } from '../contexts/Auth';
+import { setCookieToken } from '../utils/cookie';
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     mode: "onChange",
   });
+  const { checkAuth } = useAuthContext();
 
   async function onSubmit(data) {
     setIsLoading(true);
@@ -22,9 +25,13 @@ function Login() {
     try {
       const response = await axios.post(`${API_BASE}/admin/signin`, data);
       const { token, expired } = response.data;
-      alert('登入成功！');
-      reset();
-      navigate('/product');
+      setCookieToken(token, expired);
+
+      // 手動觸發一次 checkAuth，讓全域狀態 isAuth 從 false 變成 true
+      // 並更新 axios 的 Authorization header
+      await checkAuth();
+      
+      navigate('/admin/product');
     } catch (error) {
       console.error(error);
       alert('登入失敗！');
