@@ -1,10 +1,15 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+import { fileURLToPath } from "url";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+
+// 取得 __dirname 替代
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // https://vite.dev/config/
-export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? '/react2025-week5/' : '/',
+export default defineConfig(({ mode }) => ({
+  base: mode === 'production' ? '/react2025-week5/' : '/',
   plugins: [react()],
   resolve: {
     alias: {
@@ -23,4 +28,5 @@ export default defineConfig({
       }
     }
   }
-})
+}));
+
