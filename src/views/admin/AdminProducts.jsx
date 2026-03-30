@@ -3,6 +3,7 @@ import { Modal } from 'bootstrap';
 import axios from 'axios';
 import AdminProductModal from '../../components/AdminProductModal';
 import Pagination from '../../components/Pagination';
+import useMessage from '../../hooks/useMessage';
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -29,6 +30,7 @@ function AdminProducts() {
   const [pagination, setPagination] = useState({});
   const modalRef = useRef(null);
   const bsModalRef = useRef(null);
+  const { showSuccess, showError } = useMessage();
 
   useEffect(() => {
     bsModalRef.current = new Modal(modalRef.current);
@@ -50,7 +52,8 @@ function AdminProducts() {
       setProducts(response.data.products);
       setPagination(response.data.pagination);
     } catch (error) {
-      console.error(error);
+      console.log(error.response);
+      showError(error.response.data.message);
     }
   }
 
@@ -118,17 +121,21 @@ function AdminProducts() {
   async function createProduct(data) {
     try {
       const response = await axios.post(`${API_BASE}/api/${API_PATH}/admin/product`, data);
+      showSuccess(response.data.message);
     } catch (error) {
       console.error(error);
       error.response && console.log(error.response.data);
+      error.response?.data?.message && showError(error.response.data.message);
     }
   }
 
   async function updateProduct(id, data) {
     try {
       const response = await axios.put(`${API_BASE}/api/${API_PATH}/admin/product/${id}`, data);
+      showSuccess(response.data.message);
     } catch (error) {
       console.error(error);
+      error.response?.data?.message && showError(error.response.data.message);
     }
   }
 
@@ -143,8 +150,10 @@ function AdminProducts() {
   async function deleteProduct(id) {
     try {
       const response = await axios.delete(`${API_BASE}/api/${API_PATH}/admin/product/${id}`);
+      showSuccess(response.data.message);
     } catch (error) {
       console.error(error);
+      error.response?.data?.message && showError(error.response.data.message);
     }
   }
   // Modal 內的事件結束
